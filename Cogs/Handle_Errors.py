@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import traceback
 red_cross = "❌"
-red_emoji = "<:Red_Cross:810183128324374598>"
 
 class Events(commands.Cog):
     def __init__(self, bot):
