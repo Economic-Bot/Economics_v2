@@ -5,6 +5,7 @@ Else, don't do antthing
 """
 
 import json
+import random
 
 DB_PATH = "Json\db.json"
 
@@ -25,6 +26,15 @@ class MainChecks():
     def __init__(self, *_):
         self._ = _
 
+    def shop_items(self, ctx):
+        # TODO: Add more items
+        shop = {
+            "Laptop": f"Price: {random.randint(50, 1000)}",
+            "Telephone": f"Price: {random.randint(50, 1000)}",
+            "Phone": f"Price: {random.randint(50, 1000)}"
+        }
+        return shop
+
     def load_data(self) -> dict:
         """Loads data"""
         with open(DB_PATH, "r") as file:
@@ -34,7 +44,6 @@ class MainChecks():
         """Checks whether the account exist"""
         data = self.load_data()
         if str(user_id) not in data:
-            print("created new account")
             return self.open_account(str(user_id))
 
     def open_account(self, user_id: str) -> None:
@@ -44,6 +53,7 @@ class MainChecks():
         data[user_id] = {}
         data[user_id]["bank"] = 100.00
         data[user_id]["wallet"] = 100.00
+        data[user_id]["inventory"] = {}
 
         return self.save_data(data)
 
