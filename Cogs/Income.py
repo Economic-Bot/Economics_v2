@@ -1,3 +1,5 @@
+# TODO: MAKE A `INV` COMMAND FOR TMR
+
 import discord
 import json
 from utils import Main_checks
@@ -41,26 +43,27 @@ class Bussines(Income):
             embed.add_field(name=i, value=shop[i], inline=True)
         await ctx.send(embed=embed)
 
-    # TODO: MAKE A SELL COMMAND FOR TMR
     @commands.command()
-    async def buy(self, ctx, item='', amount=1): 
+    async def buy(self, ctx, item='', amount=1):
         self.account_exist(ctx.author.id)
 
         shop = self.shop_items()
         if item == '' or item not in shop.keys():
             return await ctx.send(f"Please enter a name of valid item <@{ctx.author.id}>")
-        
+
         cost = float(shop[item][len("Price: "):])*amount
         user_data = self.load_data()
         if cost > user_data[str(ctx.author.id)]["wallet"]:
             return await ctx.send("You don't have enough money in your wallet, consider withdrawing some coins")
-        
+
         user_data[str(ctx.author.id)]["wallet"] -= cost
 
         # check whether the item is already there
         if item in user_data[str(ctx.author.id)]["inventory"]["items"]:
-            index = user_data[str(ctx.author.id)]["inventory"]["items"].index(item)
-            user_data[str(ctx.author.id)]["inventory"]["amount"][index] += amount
+            index = user_data[str(ctx.author.id)
+                              ]["inventory"]["items"].index(item)
+            user_data[str(ctx.author.id)
+                      ]["inventory"]["amount"][index] += amount
             user_data[str(ctx.author.id)]["inventory"]["cost"][index] += cost
 
         else:
@@ -70,6 +73,39 @@ class Bussines(Income):
 
         await ctx.send(f"Successfully bought {amount} {item} for {self.currency} {amount}")
         self.save_data(user_data)
+
+    @commands.command()
+    async def sell(self, ctx, item='', amount=1):
+        self.account_exist(ctx.author.id)
+        user_data = self.load_data()
+        inventory = user_data[str(ctx.author.id)]["inventory"]
+
+        # check whether the item exists or not
+        if item not in inventory["items"]:
+            return await ctx.send(f"That item doesn't exist in your inventory! <@{ctx.author.id}>")
+
+        # check whethere the amount is bigger than 0
+        if amount <= 0:
+            return await ctx.send(f"Please enter an amount higher than 0! <@{ctx.author.id}>")
+
+        index = inventory["items"].index(item)
+        # check wethere there is enough of the item
+        if amount > inventory["amount"][index]:
+            return await ctx.send(f"you do not have {amount} {item}! <@{ctx.author.id}>")
+
+        inventory["amount"][index] -= amount
+        # cos = cost of sales = cost/amount * amount
+        cos = round(((inventory["cost"][index]/inventory["amount"][index]) * amount), 2)
+
+        if inventory["amount"][index] == 0:
+            inventory["items"].pop(index)
+            inventory["amount"].pop(index)
+            inventory["cost"].pop(index)
+
+        await ctx.send(f"You have sold {amount} {item} for {self.currency} {cos}")
+        user_data[str(ctx.author.id)]["wallet"] += cos
+        self.save_data(user_data)
+
 
 def setup(client):
     client.add_cog(Bussines(client))
