@@ -33,8 +33,9 @@ class Income(Main_checks.MainChecks, commands.Cog):
 class Bussines(Income):
     @commands.command()
     async def shop(self, ctx):
-        self.account_exist(ctx.author.id)
+        """This is the shop, where `items` can be bought"""
 
+        self.account_exist(ctx.author.id)
         shop = self.shop_items()
         embed = discord.Embed(
             title="Shop:", Description="You can buy anything, \nif you have enough money", color=discord.Colour.random())
@@ -45,8 +46,9 @@ class Bussines(Income):
 
     @commands.command()
     async def buy(self, ctx, item='', amount=1):
-        self.account_exist(ctx.author.id)
+        """To allow users to buy `items` from the `shop`"""
 
+        self.account_exist(ctx.author.id)
         shop = self.shop_items()
         if item == '' or item not in shop.keys():
             return await ctx.send(f"Please enter a name of valid item <@{ctx.author.id}>")
@@ -76,6 +78,8 @@ class Bussines(Income):
 
     @commands.command()
     async def sell(self, ctx, item='', amount=1):
+        """To allow users to sell the items they have previously bought"""
+
         self.account_exist(ctx.author.id)
         user_data = self.load_data()
         inventory = user_data[str(ctx.author.id)]["inventory"]
@@ -95,7 +99,8 @@ class Bussines(Income):
 
         inventory["amount"][index] -= amount
         # cos = cost of sales = cost/amount * amount
-        cos = round(((inventory["cost"][index]/inventory["amount"][index]) * amount), 2)
+        cos = round(
+            ((inventory["cost"][index]/inventory["amount"][index]) * amount), 2)
 
         if inventory["amount"][index] == 0:
             inventory["items"].pop(index)
