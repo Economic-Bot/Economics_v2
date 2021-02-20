@@ -72,7 +72,7 @@ class Events(commands.Cog):
             ))
 
         else:
-            channel = self.bot.get_channel(804666120769372181)
+            channel = self.bot.get_channel(812426694513131531)
             # await channel.send(f'```{error}```')
             error = traceback.format_exception(etype=type(error), value=error, tb=error.__traceback__)
             await channel.send('**Error in the command {}**\n```\n'.format(ctx.command.name) + ''.join(map(str, error)) + '\n```')

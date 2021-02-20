@@ -33,7 +33,7 @@ class Bussines(Income):
     async def shop(self, ctx):
         self.account_exist(ctx.author.id)
 
-        shop = self.shop_items(ctx)
+        shop = self.shop_items()
         embed = discord.Embed(
             title="Shop:", Description="You can buy anything, \nif you have enough money", color=discord.Colour.random())
         # adding the keys and values
@@ -41,6 +41,35 @@ class Bussines(Income):
             embed.add_field(name=i, value=shop[i], inline=True)
         await ctx.send(embed=embed)
 
+    # TODO: MAKE A SELL COMMAND FOR TMR
+    @commands.command()
+    async def buy(self, ctx, item='', amount=1): 
+        self.account_exist(ctx.author.id)
+
+        shop = self.shop_items()
+        if item == '' or item not in shop.keys():
+            return await ctx.send(f"Please enter a name of valid item <@{ctx.author.id}>")
+        
+        cost = float(shop[item][len("Price: "):])*amount
+        user_data = self.load_data()
+        if cost > user_data[str(ctx.author.id)]["wallet"]:
+            return await ctx.send("You don't have enough money in your wallet, consider withdrawing some coins")
+        
+        user_data[str(ctx.author.id)]["wallet"] -= cost
+
+        # check whether the item is already there
+        if item in user_data[str(ctx.author.id)]["inventory"]["items"]:
+            index = user_data[str(ctx.author.id)]["inventory"]["items"].index(item)
+            user_data[str(ctx.author.id)]["inventory"]["amount"][index] += amount
+            user_data[str(ctx.author.id)]["inventory"]["cost"][index] += cost
+
+        else:
+            user_data[str(ctx.author.id)]["inventory"]["items"].append(item)
+            user_data[str(ctx.author.id)]["inventory"]["amount"].append(amount)
+            user_data[str(ctx.author.id)]["inventory"]["cost"].append(cost)
+
+        await ctx.send(f"Successfully bought {amount} {item} for {self.currency} {amount}")
+        self.save_data(user_data)
 
 def setup(client):
     client.add_cog(Bussines(client))

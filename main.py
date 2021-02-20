@@ -54,13 +54,13 @@ async def re_load_ext(ctx, *name_of_ext):
                 client.reload_extension(i)
 
         except Exception as err:
-            await ctx.message.reply(err)
+            await ctx.send(err)
 
         else:
-            await ctx.message.reply(f"{name_of_ext} was successfully reloaded")
+            await ctx.send(f"{name_of_ext} was successfully reloaded")
 
     else:
-        await ctx.message.reply(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
+        await ctx.send(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
 
 
 @client.command(aliases=["load"])
@@ -73,13 +73,13 @@ async def load_ext(ctx, *name_of_ext):
                 client.load_extension(i)
 
         except Exception as err:
-            await ctx.message.reply(err)
+            await ctx.send(err)
 
         else:
-            await ctx.message.reply(f"{name_of_ext} was successful loaded")
+            await ctx.send(f"{name_of_ext} was successful loaded")
 
     else:
-        await ctx.message.reply(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
+        await ctx.send(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
 
 
 @client.command(aliases=["unload"])
@@ -92,13 +92,13 @@ async def unload_ext(ctx, *name_of_ext):
                 client.unload_extension(i)
 
         except Exception as err:
-            await ctx.message.reply(err)
+            await ctx.send(err)
 
         else:
-            await ctx.message.reply(f"{name_of_ext} was successful unloaded")
+            await ctx.send(f"{name_of_ext} was successful unloaded")
 
     else:
-        await ctx.message.reply(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
+        await ctx.send(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
 
 
 # when bot is added to other server
@@ -140,7 +140,7 @@ async def change_prefix(ctx, prefix):
     with open(PREFIX_PATH, "w") as f:
         json.dump(prefixes, f, indent=4)
 
-    await ctx.message.reply(f"Prefix has been changed to **{prefix}**")
+    await ctx.send(f"Prefix has been changed to **{prefix}**")
 
 
 def _load_ext(i: str) -> (Exception or None):

@@ -26,12 +26,12 @@ class MainChecks():
     def __init__(self, *_):
         self._ = _
 
-    def shop_items(self, ctx):
+    def shop_items(self):
         # TODO: Add more items
         shop = {
-            "Laptop": f"Price: {random.randint(50, 1000)}",
-            "Telephone": f"Price: {random.randint(50, 1000)}",
-            "Phone": f"Price: {random.randint(50, 1000)}"
+            "Laptop": f"Price: {random.randint(50, 51)}",
+            "Telephone": f"Price: {random.randint(50, 51)}",
+            "Phone": f"Price: {random.randint(50, 51)}"
         }
         return shop
 
@@ -51,9 +51,13 @@ class MainChecks():
         data = self.load_data()
 
         data[user_id] = {}
-        data[user_id]["bank"] = 100.00
-        data[user_id]["wallet"] = 100.00
+        data[user_id]["bank"] = 200.00
+        data[user_id]["wallet"] = 300.00
         data[user_id]["inventory"] = {}
+        data[user_id]["inventory"]["items"] = []
+        data[user_id]["inventory"]["amount"] = []
+        data[user_id]["inventory"]["cost"] = []
+
 
         return self.save_data(data)
 
