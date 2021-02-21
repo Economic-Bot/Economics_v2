@@ -1,5 +1,5 @@
 # TODO: MAKE A `INV` COMMAND FOR TMR
-
+from disputils import BotEmbedPaginator
 import discord
 import json
 from utils import Main_checks
@@ -111,6 +111,33 @@ class Bussines(Income):
         user_data[str(ctx.author.id)]["wallet"] += cos
         self.save_data(user_data)
 
+    def create_embed(self):
+        return discord.Embed(title="", description="", color=discord.Colour.random())
+
+    @commands.command(aliases=["inv"])
+    async def inventory(self, ctx):
+        """To allow user to get all the item they have in there inventory"""
+
+        user_data = self.load_data()
+        inventory = user_data[str(ctx.author.id)]["inventory"]
+
+        items = inventory["items"]
+        cost = inventory["cost"]
+        amount = inventory["amount"]
+
+        embed2 = self.create_embed()
+        for i in range(len(items)):
+            embed2.add_field(name="", value=f"{items[i]} {self.currency} {cost[i]} {amount[i]}", inline=False)
+
+        embeds = [
+            discord.Embed(title="Click the arrows to navigate", description="Get all the items you have bought", color=discord.Colour.random()),
+            embed2
+        ]
+        paginator = BotEmbedPaginator(ctx, embeds)
+        await paginator.run()
+
+
+        
 
 def setup(client):
     client.add_cog(Bussines(client))
