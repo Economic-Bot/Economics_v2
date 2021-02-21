@@ -73,7 +73,7 @@ class Bussines(Income):
             user_data[str(ctx.author.id)]["inventory"]["amount"].append(amount)
             user_data[str(ctx.author.id)]["inventory"]["cost"].append(cost)
 
-        await ctx.send(f"Successfully bought {amount} {item} for {self.currency} {amount}")
+        await ctx.send(f"Successfully bought {amount} {item} for {self.currency} {cost}")
         self.save_data(user_data)
 
     @commands.command()
