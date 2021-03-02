@@ -53,7 +53,6 @@ def dep(id, amount) -> str:
 
     data["wallet"] -= amount
     data["bank"] += amount
-    print(data)
     save_data(id, data)
 
     return f"{amount} has been deposited"
