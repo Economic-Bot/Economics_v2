@@ -1,5 +1,5 @@
 import json
-from API import utils
+from API import utils, save_data
 
 
 class Transaction:
@@ -21,6 +21,7 @@ class Transaction:
         if self.data[user_id]["bank"] > amount:
             self.data[user_id]["bank"] -= amount
             self.data[user_id]["wallet"] += amount
+            save_data(self.data)
             return True
         return False
 
@@ -35,6 +36,7 @@ class Transaction:
         if self.data[user_id]["wallet"] < amount:
             self.data[user_id]["bank"] += amount
             self.data[user_id]["wallet"] -= amount
+            save_data(self.data)
             return True
         return False
 

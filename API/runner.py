@@ -13,31 +13,30 @@ def main():
     return "Protecting the database"
 
 
-@app.route("/with=<user_id:string>+<amount:string>")
-@app.route("/withdraw=<user_id:string>+<amount:string>")
+@app.route("/with=<user_id>+<amount>")
+@app.route("/withdraw=<user_id>+<amount>")
 def withdraw(user_id: str, amount: str) -> bool:
     user_transactions.withdraw(user_id, amount)
 
 
-@app.route("/dep=<user_id:string>+<amount:string>")
+@app.route("/dep=<user_id>+<amount>")
 def deposit(user_id: str, amount: str) -> bool:
     user_transactions.dep(user_id, amount)
 
 
-@app.route("/balance=<user_id:string>")
-@app.route("/bal=<user_id:string>")
+@app.route("/balance=<user_id>")
+@app.route("/bal=<user_id>")
 def balance(user_id: str) -> bool:
     user_transactions.balance(user_id)
 
 
 def run():
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080)#, debug=True)
 
 
 def start():
-    server = Thread(target=run)
-    server.start()
+    return run()
 
 
 if __name__ == "__main__":
-    run()
+    start()

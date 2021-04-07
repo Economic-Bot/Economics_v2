@@ -3,19 +3,12 @@ import discord
 from discord.ext import commands
 import os
 import traceback
-import json
+from API import runner
+from multiprocessing import Barrier, Lock, Process
 
-PREFIX_PATH = "./Json/prefixes.json"
+TOKEN = os.environ.get("TOKEN")
 
-
-# to get the prefix
-def get_prefix(client, message):
-    with open(PREFIX_PATH, "r") as f:
-        prefixes = json.load(f)
-    return prefixes.get(str(message.guild.id), "%")
-
-
-client = commands.Bot(command_prefix=get_prefix)
+client = commands.Bot(command_prefix="%")
 
 # deleting the default `%help`
 # client.remove_command('help')
@@ -38,7 +31,7 @@ async def on_message(message):
     print(f"{author}: {content}")
 
     if "810963397809537055" in str(content) and str(message.author.id) != "810963397809537055":
-        await message.channel.send(f"My prefix: `{get_prefix(client, message)}`, send `{get_prefix(client, message)}help` to see all the commands <@{author.id}>")
+        await message.channel.send(f"My prefix: `%{(client, message)}`, send `%{(client, message)}help` to see all the commands <@{author.id}>")
 
     # to see what command was given
     await client.process_commands(message)
@@ -101,48 +94,6 @@ async def unload_ext(ctx, *name_of_ext):
         await ctx.send(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
 
 
-# when bot is added to other server
-@client.event
-async def on_guild_join(guild):
-    with open(PREFIX_PATH, "r") as f:
-        prefixes = json.load(f)
-
-    prefixes[str(guild.id)] = "%"
-
-    # storing the data
-    with open(PREFIX_PATH, "w") as f:
-        json.dump(prefixes, f, indent=4)
-
-
-# when bot removed from server
-@client.event
-async def on_guild_remove(guild):
-    with open(PREFIX_PATH, "r") as f:
-        prefixes = json.load(f)
-
-    prefixes.pop(str(guild.id))
-
-    # storing the data
-    with open(PREFIX_PATH, "w") as f:
-        json.dump(prefixes, f, indent=4)
-
-
-@client.command(aliases=["set_prefix", "setprefix", "changeprefix"])
-@commands.has_permissions(administrator=True)
-async def change_prefix(ctx, prefix):
-    """To allow the prefix to be changed"""
-
-    with open(PREFIX_PATH, "r") as f:
-        prefixes = json.load(f)
-
-    prefixes[str(ctx.guild.id)] = prefix
-    # storing the data
-    with open(PREFIX_PATH, "w") as f:
-        json.dump(prefixes, f, indent=4)
-
-    await ctx.send(f"Prefix has been changed to **{prefix}**")
-
-
 def _load_ext(i: str) -> (Exception or None):
     """Loads all the extensions"""
 
@@ -155,6 +106,14 @@ def _load_ext(i: str) -> (Exception or None):
         traceback.print_exc()
 
 
+def run_server(*args):
+    return runner.start()
+
+
+def run_bot(*args):
+    return client.run(globals()["TOKEN"])
+
+
 if __name__ == '__main__':
     file_to_ignore = ("__init__.py", )
 
@@ -165,7 +124,7 @@ if __name__ == '__main__':
     for e in economic_etx:
         _load_ext(e)
 
-    # loading the tokens
-    TOKEN = os.environ.get('bot_Token')
-
-    client.run(TOKEN)
+    synchronizer = Barrier(2)
+    serializer = Lock()
+    Process(target=run_bot, args=(synchronizer, serializer)).start()
+    Process(target=run_server, args=(synchronizer, serializer)).start()
