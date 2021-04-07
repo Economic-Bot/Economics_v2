@@ -10,7 +10,7 @@ user_transactions = Client_Transactions.Transaction()
 
 @app.route('/')
 def main():
-    return "Hmm"
+    return "Protecting the database"
 
 
 @app.route("/with=<user_id:string>+<amount:string>")
