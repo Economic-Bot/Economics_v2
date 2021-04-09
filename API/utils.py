@@ -24,6 +24,7 @@ def check(function):
                 "bank": 500,
                 "inventory": {}
             }
+        args = to_int(*args)
         return function(self, user_id, *args)
     return check_account_exists
 
