@@ -30,8 +30,18 @@ def balance(user_id: str) -> (bool, None):
     user_transactions.balance(user_id)
 
 
+@app.route("/buy=<user_id>+<item>+<amount>")
+def but(user_id: str, item: str, amount: int) -> (bool, None):
+    user_transactions.buy(user_id, item, amount)
+
+
+@app.route("/sell=<user_id>+<item>+<amount>")
+def sell(user_id: str, item: str, amount: int) -> (bool, None):
+    user_transactions.sell(user_id, item, amount)
+
+
 def run():
-    app.run(host="0.0.0.0", port=8080)#, debug=True)
+    app.run(host="0.0.0.0", port=8080)  # , debug=True)
 
 
 def start():

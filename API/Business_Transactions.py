@@ -35,7 +35,7 @@ class Business:
             # check whether the person has enough items
             if amount <= self.data[user_id]["inventory"][item]["amount"]:
                 self.data[user_id]["wallet"] += cost
-                # remove that from the `inventory`
+                # remove that item from the `inventory`
                 self.data[user_id]["inventory"][item]["amount"] -= amount
                 return (True, utils.save_data())
         return (False, utils.save_data())
