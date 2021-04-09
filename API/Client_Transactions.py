@@ -22,8 +22,8 @@ class Transaction(Business_Transactions.Business):
         if self.data[user_id]["bank"] > amount:
             self.data[user_id]["bank"] -= amount
             self.data[user_id]["wallet"] += amount
-            return (True, utils.save_data())
-        return (False, utils.save_data())
+            return (True, utils.save_data(self.data))
+        return (False, utils.save_data(self.data))
 
     @utils.check
     def dep(self, user_id: str, amount: int) -> (bool, None):
@@ -36,8 +36,8 @@ class Transaction(Business_Transactions.Business):
         if self.data[user_id]["wallet"] < amount:
             self.data[user_id]["bank"] += amount
             self.data[user_id]["wallet"] -= amount
-            return (True, utils.save_data())
-        return (False, utils.save_data())
+            return (True, utils.save_data(self.data))
+        return (False, utils.save_data(self.data))
 
     @utils.check
     def balance(self, user_id: str) -> [float, float]:

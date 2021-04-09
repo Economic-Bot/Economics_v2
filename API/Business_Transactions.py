@@ -25,8 +25,8 @@ class Business:
                     self.data[user_id]["inventory"][item]["amount"] += amount
                 else:
                     self.data[user_id]["inventory"][item]["amount"] = amount
-                return (True, utils.save_data())
-        return (False, utils.save_data())
+                return (True, utils.save_data(self.data))
+        return (False, utils.save_data(self.data))
 
     @utils.check
     def sell(self, user_id: str, item: str, amount: int) -> (bool, None):
@@ -37,5 +37,5 @@ class Business:
                 self.data[user_id]["wallet"] += cost
                 # remove that item from the `inventory`
                 self.data[user_id]["inventory"][item]["amount"] -= amount
-                return (True, utils.save_data())
-        return (False, utils.save_data())
+                return (True, utils.save_data(self.data))
+        return (False, utils.save_data(self.data))
