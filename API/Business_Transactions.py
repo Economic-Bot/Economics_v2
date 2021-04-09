@@ -27,3 +27,15 @@ class Business:
                     self.data[user_id]["inventory"][item]["amount"] = amount
                 return True
         return False
+
+    @utils.check()
+    def sell(self, user_id: str, item: str, amount: int) -> bool:
+        if item in self.data[user_id]["inventory"].keys():
+            cost = amount*self.shop[item]["sell"]
+            # check whether the person has enough items
+            if amount <= self.data[user_id]["inventory"][item]["amount"]:
+                self.data[user_id]["wallet"] += cost
+                # remove that from the `inventory`
+                self.data[user_id]["inventory"][item]["amount"] -= amount
+                return True
+        return False
