@@ -7,11 +7,11 @@ class Transaction:
         """
         Loads the database
         """
-        with open("API/db.json", "r") as file:
+        with open("API/user_db.json", "r") as file:
             self.data = json.load(file)
 
     @utils.check
-    def withdraw(self, user_id: str, amount: str) -> bool:
+    def withdraw(self, user_id: str, amount: int) -> bool:
         """
         Allows users to withdraw money from the bank.
         Bank amount decreases
@@ -26,7 +26,7 @@ class Transaction:
         return False
 
     @utils.check
-    def dep(self, user_id: str, amount: str) -> bool:
+    def dep(self, user_id: str, amount: int) -> bool:
         """
         Allows users to deposit money from the bank.
         Bank amount increases

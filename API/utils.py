@@ -18,5 +18,5 @@ def check(function):
 
 def save_data(data: dict):
     """Stores the data in the file"""
-    with open("API/db.json", "w") as file:
+    with open("API/user_db.json", "w") as file:
         json.dump(data, file, indent=4)
