@@ -15,12 +15,12 @@ def main():
 
 @app.route("/with=<user_id>+<amount>")
 @app.route("/withdraw=<user_id>+<amount>")
-def withdraw(user_id: str, amount: str) -> (bool, None):
+def withdraw(user_id: str, amount: int) -> (bool, None):
     user_transactions.withdraw(user_id, amount)
 
 
 @app.route("/dep=<user_id>+<amount>")
-def deposit(user_id: str, amount: str) -> (bool, None):
+def deposit(user_id: str, amount: int) -> (bool, None):
     user_transactions.dep(user_id, amount)
 
 
