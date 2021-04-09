@@ -1,4 +1,4 @@
-from API import utils, save_data
+from API import utils
 import json
 
 
@@ -13,7 +13,7 @@ class Business:
         with open("API/shop_db.json", "r") as file:
             self.shop = json.load(file)
 
-    @utils.check()
+    @utils.check
     def buy(self, user_id: str, item: str, amount: int) -> (bool, None):
         if item in self.shop.keys():
             cost = amount*self.shop[item]["cost"]
@@ -28,7 +28,7 @@ class Business:
                 return (True, utils.save_data())
         return (False, utils.save_data())
 
-    @utils.check()
+    @utils.check
     def sell(self, user_id: str, item: str, amount: int) -> (bool, None):
         if item in self.data[user_id]["inventory"].keys():
             cost = amount*self.shop[item]["sell"]
