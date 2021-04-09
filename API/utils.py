@@ -2,7 +2,7 @@ import json
 from API import Client_Transactions
 
 
-def to_int(*args, **kwargs) -> tuple:
+def to_int(*args) -> list:
     """Converts the args into a float"""
     new_args = []
     for i in args:
@@ -11,28 +11,20 @@ def to_int(*args, **kwargs) -> tuple:
         else:
             new_args.append(i)
 
-    new_kargs = {}
-    for i in kwargs.keys():
-        if kwargs[i].isdigit():
-            new_kargs[i] = int(kwargs[i])
-        else:
-            new_kargs[i] = kwargs[i]
-
-    return new_args, new_kargs
+    return new_args
 
 
 def check(function):
     """Checks whether the account of the user already exists or not"""
 
-    def check_account_exists(self, user_id: str, *args, **kwargs):
+    def check_account_exists(self, user_id: str, *args):
         if not user_id in self.data:
             self.data[user_id] = {
                 "wallet": 100,
                 "bank": 500,
                 "inventory": {}
             }
-        args, kwargs = to_int(*args, **kwargs)
-        return function(self, user_id, *args, **kwargs)
+        return function(self, user_id, *args)
     return check_account_exists
 
 
