@@ -12,9 +12,9 @@ class Business:
 
         with open("API/shop_db.json", "r") as file:
             self.shop = json.load(file)
-    
+
     @utils.check()
-    def buy(self, user_id: str, item: str, amount: int) -> bool:
+    def buy(self, user_id: str, item: str, amount: int) -> (bool, None):
         if item in self.shop.keys():
             cost = amount*self.shop[item]["cost"]
             # check whether the person has enough funds
@@ -25,11 +25,11 @@ class Business:
                     self.data[user_id]["inventory"][item]["amount"] += amount
                 else:
                     self.data[user_id]["inventory"][item]["amount"] = amount
-                return True
-        return False
+                return (True, utils.save_data())
+        return (False, utils.save_data())
 
     @utils.check()
-    def sell(self, user_id: str, item: str, amount: int) -> bool:
+    def sell(self, user_id: str, item: str, amount: int) -> (bool, None):
         if item in self.data[user_id]["inventory"].keys():
             cost = amount*self.shop[item]["sell"]
             # check whether the person has enough items
@@ -37,5 +37,5 @@ class Business:
                 self.data[user_id]["wallet"] += cost
                 # remove that from the `inventory`
                 self.data[user_id]["inventory"][item]["amount"] -= amount
-                return True
-        return False
+                return (True, utils.save_data())
+        return (False, utils.save_data())

@@ -11,7 +11,7 @@ class Transaction:
             self.data = json.load(file)
 
     @utils.check
-    def withdraw(self, user_id: str, amount: int) -> bool:
+    def withdraw(self, user_id: str, amount: int) -> (bool, None):
         """
         Allows users to withdraw money from the bank.
         Bank amount decreases
@@ -21,12 +21,11 @@ class Transaction:
         if self.data[user_id]["bank"] > amount:
             self.data[user_id]["bank"] -= amount
             self.data[user_id]["wallet"] += amount
-            save_data(self.data)
-            return True
-        return False
+            return (True, utils.save_data())
+        return (False, utils.save_data())
 
     @utils.check
-    def dep(self, user_id: str, amount: int) -> bool:
+    def dep(self, user_id: str, amount: int) -> (bool, None):
         """
         Allows users to deposit money from the bank.
         Bank amount increases
@@ -36,9 +35,8 @@ class Transaction:
         if self.data[user_id]["wallet"] < amount:
             self.data[user_id]["bank"] += amount
             self.data[user_id]["wallet"] -= amount
-            save_data(self.data)
-            return True
-        return False
+            return (True, utils.save_data())
+        return (False, utils.save_data())
 
     @utils.check
     def balance(self, user_id: str) -> [float, float]:
