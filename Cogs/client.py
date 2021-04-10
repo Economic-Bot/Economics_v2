@@ -14,7 +14,7 @@ class ClientTransactions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["balance"])
     async def bal(self, ctx: discord.Context):
         """
         To allow the user to check their balance
@@ -46,7 +46,24 @@ class ClientTransactions(commands.Cog):
             return await ctx.send(f"You withdrew {amount}")
 
         log.info(f"{ctx.author} didn't have enough funds to withdraw {amount}")
-        await ctx.send(f"You don't have enough funds to withdraw {amount}")
+        await ctx.send(f"You don't have enough funds to withdraw {amount}!")
+
+    @commands.command(aliases=["deposit"])
+    async def dep(self, ctx, amount: int = 10):
+        """
+        Allows user to deposit money from their wallet
+        :param amount: Amount to be deposited
+        """
+        result = requests.get(utils.URL).json()
+        flag = result['flag']
+
+        if flag:
+            log.info(f"{ctx.author} deposited {amount}")
+            return await ctx.send(f"You deposited {amount}")
+
+        log.info(f"{ctx.author} didn't have enough funds to deposit {amount}")
+        await ctx.send(f"You don't have enough funds to deposit {amount}!")
+
 
 
 def setup(bot):
