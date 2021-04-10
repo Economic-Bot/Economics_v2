@@ -2,6 +2,9 @@ import json
 from API import Client_Transactions
 
 
+URL = ""
+CURRENCY = "⏣"
+
 def to_int(*args) -> list:
     """Converts the args into a float"""
     new_args = []
