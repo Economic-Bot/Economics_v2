@@ -1,5 +1,13 @@
 import discord
+import requests
+from API import utils
 from discord.ext import commands
+import logging as log
+
+log.basicConfig(
+    format='%(levelname)s: %(name)s: %(message)s',
+    level=log.INFO
+)
 
 
 class BusinessTransactions(commands.Cog):
@@ -8,15 +16,61 @@ class BusinessTransactions(commands.Cog):
 
     @commands.command()
     async def buy(self, ctx: discord.Context, item: str, amount=1):
-        embed = (
-            discord.Embed(
-                title=f"Successful {item.capitalize()} purchase",
-                description=f"{ctx.author} bought {amount} {item.capitalize()} and paid ⏣ {cost}",
-                color=discord.Color.random()
+        """
+        Allows users to buy items from the shop
+        :param item: Thing which the user is going to buy
+        :param amount: `How many` items the user is going to buy 
+        """
+        result = requests.get(utils.URL).json()
+        cost = result['cost']
+        flag = result['flag']
+
+        if flag:
+            log.info(
+                f"{ctx.author} has enough funds to buy {amount} {item.capitalize()}")
+            embed = (
+                discord.Embed(
+                    title=f"Successful {item.capitalize()} purchase",
+                    description=f"{ctx.author} bought {amount} {item.capitalize()} and paid {cost}",
+                    color=discord.Color.random()
+                )
+                .set_footer(text="Thanks for your purchase!", icon_url=ctx.author.avatar_url)
             )
-            .add_field(name="", value="", inline=True)
-        )
-        await ctx.send(embed=embed)
+            return await ctx.send(embed=embed)
+
+        log.info(
+            f"{ctx.author} doesn't have enough funds to buy {amount} {item.capitalize()}")
+        message = f"You don't have enough money in your wallet to buy {amount} {item.capitalize()}!"
+        await ctx.send(message)
+
+    @commands.command()
+    async def sell(self, ctx: discord.Context, item: str, amount=1):
+        """
+        Allows users to sell items from their inventory
+        :param item: Thing which the user is going to sell
+        :param amount: `How many` items the user is going to sell 
+        """
+        result = requests.get(utils.URL).json()
+        cost = result['cost']
+        flag = result['flag']
+
+        if flag:
+            log.info(
+                f"{ctx.author} sold {amount} {item.capitalize()} for {cost}")
+            embed = (
+                discord.Embed(
+                    title=f"Successful {item.capitalize()} purchase",
+                    description=f"{ctx.author} sold {amount} {item.capitalize()} and paid ⏣ {cost}",
+                    color=discord.Color.random()
+                )
+                .set_footer(text="Thanks for your purchase!", icon_url=ctx.author.avatar_url)
+            )
+            return await ctx.send(embed=embed)
+
+        log.info(
+            f"{ctx.author} doesn't have {amount} {item.capitalize()} to sell for {cost}")
+        message = f"You don't have {amount} {item.capitalize()} to sell!"
+        await ctx.send(message)
 
 
 def setup(bot):
