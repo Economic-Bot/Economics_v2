@@ -15,7 +15,7 @@ class BusinessTransactions(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def buy(self, ctx: discord.Context, item: str, amount=1):
+    async def buy(self, ctx, item: str, amount=1):
         """
         Allows users to buy items from the shop
         :param item: Thing which the user is going to buy
@@ -44,7 +44,7 @@ class BusinessTransactions(commands.Cog):
         await ctx.send(message)
 
     @commands.command()
-    async def sell(self, ctx: discord.Context, item: str, amount=1):
+    async def sell(self, ctx, item: str, amount=1):
         """
         Allows users to sell items from their inventory
         :param item: Thing which the user is going to sell

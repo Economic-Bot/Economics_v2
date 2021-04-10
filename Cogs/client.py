@@ -15,7 +15,7 @@ class ClientTransactions(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=["balance"])
-    async def bal(self, ctx: discord.Context):
+    async def bal(self, ctx):
         """
         To allow the user to check their balance
         """
