@@ -38,10 +38,12 @@ class BusinessTransactions(commands.Cog):
             )
             return await ctx.send(embed=embed)
 
-        log.info(
-            f"{ctx.author} doesn't have enough funds to buy {amount} {item.capitalize()}")
-        message = f"You don't have enough money in your wallet to buy {amount} {item.capitalize()}!"
-        await ctx.send(message)
+        if not cost:  # cost == 0.00
+            log.info(
+                f"{ctx.author} doesn't have enough funds to buy {amount} {item.capitalize()}")
+            message = f"You don't have enough money in your wallet to buy {amount} {item.capitalize()}!"
+            return await ctx.send(message)
+
 
     @commands.command()
     async def sell(self, ctx, item: str, amount=1):
@@ -55,7 +57,9 @@ class BusinessTransactions(commands.Cog):
         flag = result['flag']
 
         if flag:
-            log.info(f"{ctx.author} sold {amount} {item.capitalize()} for {cost}")
+            log.info(
+                f"{ctx.author} sold {amount} {item.capitalize()} for {cost}")
+            
             embed = (
                 discord.Embed(
                     title=f"Successful {item.capitalize()} purchase",
@@ -66,8 +70,14 @@ class BusinessTransactions(commands.Cog):
             )
             return await ctx.send(embed=embed)
 
-        log.info(f"{ctx.author} doesn't have {amount} {item.capitalize()} to sell for {cost}")
-        message = f"You don't have {amount} {item.capitalize()} to sell!"
+        if not cost:
+            log.info(
+                f"{ctx.author} doesn't have {amount} {item.capitalize()} to sell for {cost}")
+            message = f"You don't have {amount} {item.capitalize()} to sell!"
+            return await ctx.send(message)
+
+        log.info(f"{ctx.author} doesn't have enough {item.capitalize()}")
+        message = f"You don't have {item.capitalize()} in your inventory!"
         await ctx.send(message)
 
 
