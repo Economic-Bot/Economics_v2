@@ -22,7 +22,7 @@ class Business:
         log.info("Loaded database(s)")
 
     @utils.check
-    def buy(self, user_id: str, item: str, amount: int) -> (bool, None):
+    def buy(self, user_id: str, item: str, amount: int) -> (bool, float, None):
         log.info(f"Received info: {user_id}, {item}, {amount}")
 
         if item in self.shop.keys():
@@ -54,7 +54,7 @@ class Business:
         return (False, 0.00, utils.save_data(self.data))
 
     @utils.check
-    def sell(self, user_id: str, item: str, amount: int) -> (bool, None):
+    def sell(self, user_id: str, item: str, amount: int) -> (bool, float, None):
         log.info(f"Received info: {user_id}, {item}, {amount}")
 
         if item in self.data[user_id]["inventory"].keys():
