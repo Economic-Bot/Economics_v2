@@ -5,7 +5,7 @@ from discord.ext import commands
 import logging as log
 
 log.basicConfig(
-    format='%(levelname)s: %(name)s: %(message)s',
+    format='Bot --> %(levelname)s: %(name)s: %(message)s',
     level=log.INFO
 )
 
@@ -55,8 +55,7 @@ class BusinessTransactions(commands.Cog):
         flag = result['flag']
 
         if flag:
-            log.info(
-                f"{ctx.author} sold {amount} {item.capitalize()} for {cost}")
+            log.info(f"{ctx.author} sold {amount} {item.capitalize()} for {cost}")
             embed = (
                 discord.Embed(
                     title=f"Successful {item.capitalize()} purchase",
@@ -67,8 +66,7 @@ class BusinessTransactions(commands.Cog):
             )
             return await ctx.send(embed=embed)
 
-        log.info(
-            f"{ctx.author} doesn't have {amount} {item.capitalize()} to sell for {cost}")
+        log.info(f"{ctx.author} doesn't have {amount} {item.capitalize()} to sell for {cost}")
         message = f"You don't have {amount} {item.capitalize()} to sell!"
         await ctx.send(message)
 
