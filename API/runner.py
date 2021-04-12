@@ -16,29 +16,29 @@ def main():
 @app.route("/with=<user_id>+<amount>")
 @app.route("/withdraw=<user_id>+<amount>")
 def withdraw(user_id: str, amount: int) -> t.Dict[t.str, bool, str, float, str, None]:
-    user_transactions.withdraw()
+    return user_transactions.withdraw()
 
 
 @app.route("/dep=<user_id>+<amount>")
 def deposit(user_id: str, amount: int) -> {str: bool, str: float, str: None}:
-    user_transactions.withdraw()
+    return user_transactions.withdraw()
 
 
 
 @app.route("/balance=<user_id>")
 @app.route("/bal=<user_id>")
 def balance(user_id: str) -> {str: bool, str: float, str: None}:
-    user_transactions.balance()
+    return user_transactions.balance()
 
 
 @app.route("/buy=<user_id>+<item>+<amount>")
 def buy(user_id: str, item: str, amount: int) -> {str: bool, str: float, str: None}:
-    user_transactions.buy()
+    return user_transactions.buy()
 
 
 @app.route("/sell=<user_id>+<item>+<amount>")
 def sell(user_id: str, item: str, amount: int) -> {str: bool, str: float, str: None}:
-    user_transactions.sell()
+    return user_transactions.sell()
 
 
 def run():
