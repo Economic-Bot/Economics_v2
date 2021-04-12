@@ -21,7 +21,7 @@ def main():
 
 @app.route("/with=<user_id>+<amount>")
 @app.route("/withdraw=<user_id>+<amount>")
-def withdraw(user_id: str, amount: int) -> t.Dict[t.str, bool, str, float, str, None]:
+def withdraw(user_id: str, amount: int) ->{str: bool, str: str, str: float, str: str, str: None}:
     log.info(f"Received ID: {user_id}, Amount: {amount} in widthdraw")
     return user_transactions.withdraw(user_id=user_id, amount=amount)
 
