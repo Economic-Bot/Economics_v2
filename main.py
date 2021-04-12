@@ -94,25 +94,14 @@ async def unload_ext(ctx, *name_of_ext):
         await ctx.send(f"You don't have perms <@{ctx.author.id}>, _why would you do it though ?_")
 
 
-def _load_ext(i: str) -> (Exception or None):
-    """Loads all the extensions"""
-
-    try:
-        print(f"Loaded: {i}")
-        client.load_extension(i)
-
-    except Exception:
-        print(f"Couldn't load {i}")
-        traceback.print_exc()
-
-
 def run_server(*args):
     return runner.start()
 
 
 def run_bot(*args):
     extensions = [
-        f"Cogs.{i[:-3]}" for i in os.listdir("./Cogs")
+        f"Cogs.{i[:-3]}" 
+        for i in os.listdir("./Cogs")
         if i not in IGNORED_FILES
     ]
     for i in extensions:
@@ -127,15 +116,6 @@ def run_bot(*args):
 
 
 if __name__ == '__main__':
-    file_to_ignore = ("__init__.py", )
-
-    # loading the extensions
-    economic_etx = [f"Cogs.{i[:-3]}" for i in os.listdir(
-        "Cogs") if i[-3:] == ".py" and not i in file_to_ignore]
-
-    for e in economic_etx:
-        _load_ext(e)
-
     synchronizer = Barrier(2)
     serializer = Lock()
     Process(target=run_bot, args=(synchronizer, serializer)).start()
