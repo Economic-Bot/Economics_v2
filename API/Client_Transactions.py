@@ -20,7 +20,7 @@ class Transaction(Business_Transactions.Business):
         log.info("Loaded database")
 
     @utils.check
-    def withdraw(self, user_id: str, amount: int) -> (bool, None):
+    def withdraw(self, *, user_id: str, amount: int) -> (bool, None):
         """
         Allows users to withdraw money from the bank.
         Bank amount decreases
@@ -34,7 +34,7 @@ class Transaction(Business_Transactions.Business):
         return {"flag": False, "None": utils.save_data(self.data)}
 
     @utils.check
-    def dep(self, user_id: str, amount: int) -> (bool, None):
+    def dep(self, *, user_id: str, amount: int) -> (bool, None):
         """
         Allows users to deposit money from the bank.
         Bank amount increases
@@ -48,7 +48,7 @@ class Transaction(Business_Transactions.Business):
         return {"flag": False, "None": utils.save_data(self.data)}
 
     @utils.check
-    def balance(self, user_id: str) -> {str: float, str: float, str: float}:
+    def balance(self, *, user_id: str) -> {str: float, str: float, str: float}:
         """
         Allows users to check there balance.
         :return: [Float, Float]
