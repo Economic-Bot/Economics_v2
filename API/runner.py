@@ -53,7 +53,7 @@ def sell(user_id: str, item: str, amount: int) -> {str: bool, str: float, str: N
 
 def run():
     log.critical("Started the host")
-    app.run(host="0.0.0.0", port=8080)
+    app.run(port=6969)#host="0.0.0.0", port=8080)
 
 
 def start():
