@@ -3,7 +3,7 @@ import json
 import logging as log
 
 log.basicConfig(
-    format='API => %(levelname)s: %(name)s: %(message)s',
+    format='Business API => %(levelname)s: %(name)s: %(message)s',
     level=log.INFO
 )
 

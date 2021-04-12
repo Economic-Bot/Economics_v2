@@ -5,7 +5,7 @@ from discord.ext import commands
 import logging as log
 
 log.basicConfig(
-    format='Bot --> %(levelname)s: %(name)s: %(message)s',
+    format='Client Bot => %(levelname)s: %(name)s: %(message)s',
     level=log.INFO
 )
 

@@ -3,7 +3,7 @@ from API import utils, Business_Transactions
 import logging as log
 
 log.basicConfig(
-    format='API => %(levelname)s: %(name)s: %(message)s',
+    format='Client API => %(levelname)s: %(name)s: %(message)s',
     level=log.INFO
 )
 
