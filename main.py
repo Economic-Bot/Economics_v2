@@ -7,7 +7,7 @@ from API import runner
 from multiprocessing import Barrier, Lock, Process
 
 TOKEN = os.environ.get("TOKEN")
-
+IGNORED_FILES = ("__init__.py", "__pycache__")   # ignore this files
 client = commands.Bot(command_prefix="%")
 
 # deleting the default `%help`
@@ -111,7 +111,19 @@ def run_server(*args):
 
 
 def run_bot(*args):
-    return client.run(globals()["TOKEN"])
+    extensions = [
+        f"Cogs.{i[:-3]}" for i in os.listdir("./Cogs")
+        if i not in IGNORED_FILES
+    ]
+    for i in extensions:
+        try:
+            client.load_extension(i)
+            print(f"Loaded extension: {i}")
+        except Exception:
+            print("Failed to load extension: {}".format(i))
+            traceback.print_exc()
+
+    return client.run(TOKEN)
 
 
 if __name__ == '__main__':
