@@ -73,6 +73,6 @@ class Business:
             log.info(f"Sending info: {False} {0.00} {None}")
             return (False, 0.00, utils.save_data(self.data))
 
-        log.info(f"The user doesn't have {items}")
+        log.info(f"The user doesn't have {items} in his/her inventory")
         log.info(f"Sending info: {False} {0.00} {None}")
         return (False, 0.00, utils.save_data(self.data))
