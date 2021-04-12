@@ -5,30 +5,37 @@ URL = "http://0.0.0.0:8080/"
 CURRENCY = "⏣"
 
 
-def to_int(*args) -> list:
+def to_int(**args) -> dict:
     """Converts the args into a float"""
-    new_args = []
-    for i in args:
+    print(args)
+    new_dict = {}
+    for key, i in zip(args.keys(), args.values()):
         if i.isdigit():
-            new_args.append(int(i))
+            new_dict[key] = float(i)
         else:
-            new_args.append(i)
+            new_dict[key] = i
 
-    return new_args
+    return new_dict
 
 
 def check(function):
     """Checks whether the account of the user already exists or not"""
 
-    def check_account_exists(self, *, user_id: str, **args):
+    def check_account_exists(self: object, *, user_id: str, **args):
+        data = {}
         if not user_id in self.data:
-            self.data[user_id] = {
+            data[user_id] = {
                 "wallet": 100,
                 "bank": 500,
                 "inventory": {}
             }
-        args = to_int(**args)
-        return function(self, user_id, **args)
+        args = to_int(user_id=user_id, **args)
+        args["user_id"] = int(user_id)
+
+        if data:
+            save_data(data)
+        self.__class__.__init__(self)  # to reload the data
+        return function(self, **args)
     return check_account_exists
 
 
