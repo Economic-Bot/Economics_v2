@@ -64,7 +64,18 @@ class ClientTransactions(commands.Cog):
         log.info(f"{ctx.author} didn't have enough funds to deposit {amount}")
         await ctx.send(f"You don't have enough funds to deposit {amount}!")
 
+    @commands.command(aliases=["bal"])
+    async def balance(self, ctx, member: discord.Member=None):
+        """
+        Allows users to check their balance
+        :param member: To the get the balance of another user
+        """
+        result = requests.get(utils.URL).json()
+        wallet = result["wallet"]
+        bank = result["bank"]
+        inventory = result["inventory"]
 
+        await ctx.send(f"{wallet}, {bank}, {inventory}")
 
 def setup(bot):
     bot.add_cog(ClientTransactions(bot))

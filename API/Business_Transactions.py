@@ -22,7 +22,7 @@ class Business:
         log.info("Loaded database(s)")
 
     @utils.check
-    def buy(self, user_id: str, item: str, amount: int) -> (bool, float, None):
+    def buy(self, user_id: str, item: str, amount: int) -> {str: bool, str: float, str: None}:
         log.info(f"Received info: {user_id}, {item}, {amount}")
 
         if item in self.shop.keys():
@@ -43,18 +43,18 @@ class Business:
                     log.info("Added {item} to the inventory")
 
                 log.info(f"Sending info: {True}, {cost}, {None}")
-                return (True, cost, utils.save_data(self.data))
+                return {"flag": True, "cost": cost, "None": utils.save_data(self.data)}
 
-            log.info(f"The user doesnt have enough funds")
+            log.info(f"The user doesn't have enough funds")
             log.info(f"Sending info: {False} {0.00} {None}")
-            return (False, 0.00, utils.save_data(self.data))
+            return {"flag": False, "cost": 0.00, "None": utils.save_data(self.data)}
 
         log.info(f"{item} doesn't exist in the shop")
         log.info(f"Sending info: {False} {0.00} {None}")
-        return (False, 0.00, utils.save_data(self.data))
+        return {"flag": False, "cost": 0.00, "None": utils.save_data(self.data)}
 
     @utils.check
-    def sell(self, user_id: str, item: str, amount: int) -> (bool, float, None):
+    def sell(self, user_id: str, item: str, amount: int) -> {str: bool, str: float, str: None}:
         log.info(f"Received info: {user_id}, {item}, {amount}")
 
         if item in self.data[user_id]["inventory"].keys():
@@ -67,12 +67,12 @@ class Business:
                 self.data[user_id]["inventory"][item]["amount"] -= amount
                 log.info(f"Removed {amount} {item} from the inventory")
                 log.info(f"Sending info: {True}, {cost}, {None}")
-                return (True, cost, utils.save_data(self.data))
+                return {"flag": True, "cost": cost, "None": utils.save_data(self.data)}
 
-            log.info(f"The user doesnt have {amount} {items}")
+            log.info(f"The user doesn't have {amount} {item}")
             log.info(f"Sending info: {False} {0.00} {None}")
-            return (False, 0.00, utils.save_data(self.data))
+            return {"flag": False, "cost": 0.00, "None": utils.save_data(self.data)}
 
-        log.info(f"The user doesn't have {items} in his/her inventory")
+        log.info(f"The user doesn't have {item} in his/her inventory")
         log.info(f"Sending info: {False} {0.00} {None}")
-        return (False, 0.00, utils.save_data(self.data))
+        return {"flag": False, "cost": 0.00, "None": utils.save_data(self.data)}

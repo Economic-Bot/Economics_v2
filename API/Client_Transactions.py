@@ -30,8 +30,8 @@ class Transaction(Business_Transactions.Business):
         if self.data[user_id]["bank"] > amount:
             self.data[user_id]["bank"] -= amount
             self.data[user_id]["wallet"] += amount
-            return (True, utils.save_data(self.data))
-        return (False, utils.save_data(self.data))
+            return {"flag": True, "None": utils.save_data(self.data)}
+        return {"flag": False, "None": utils.save_data(self.data)}
 
     @utils.check
     def dep(self, user_id: str, amount: int) -> (bool, None):
@@ -44,13 +44,21 @@ class Transaction(Business_Transactions.Business):
         if self.data[user_id]["wallet"] < amount:
             self.data[user_id]["bank"] += amount
             self.data[user_id]["wallet"] -= amount
-            return (True, utils.save_data(self.data))
-        return (False, utils.save_data(self.data))
+            return {"flag": True, "None": utils.save_data(self.data)}
+        return {"flag": False, "None": utils.save_data(self.data)}
 
     @utils.check
-    def balance(self, user_id: str) -> [float, float]:
+    def balance(self, user_id: str) -> {str: float, str: float, str: float}:
         """
         Allows users to check there balance.
         :return: [Float, Float]
         """
-        return [self.data[user_id]["wallet"], self.data[user_id]["bank"]]
+        inv: float = 0.00
+        for i in self.data[user_id]["inventory"]:
+            inv += self.data[user_id]["inventory"][i]["amount"]
+
+        return {
+            "wallet": self.data[user_id]["wallet"],
+            "bank": self.data[user_id]["bank"],
+            "inventory": inv
+        }
