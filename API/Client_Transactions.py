@@ -1,5 +1,11 @@
 import json
 from API import utils, Business_Transactions
+import logging as log
+
+log.basicConfig(
+    format='API => %(levelname)s: %(name)s: %(message)s',
+    level=log.INFO
+)
 
 
 class Transaction(Business_Transactions.Business):
@@ -10,6 +16,8 @@ class Transaction(Business_Transactions.Business):
         super(Transaction, self).__init__()
         with open("API/user_db.json", "r") as file:
             self.data = json.load(file)
+
+        log.info("Loaded database")
 
     @utils.check
     def withdraw(self, user_id: str, amount: int) -> (bool, None):
