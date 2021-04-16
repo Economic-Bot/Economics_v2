@@ -100,7 +100,7 @@ def run_server(*args):
 
 def run_bot(*args):
     extensions = [
-        f"Cogs.{i[:-3]}" 
+        f"Cogs.{i[:-3]}"
         for i in os.listdir("./Cogs")
         if i not in IGNORED_FILES
     ]
