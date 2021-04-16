@@ -14,8 +14,7 @@ class Transaction(Business_Transactions.Business):
         Loads the database
         """
         super(Transaction, self).__init__()
-        with open("API/user_db.json", "r") as file:
-            self.data = json.load(file)
+        self.data = utils.load_data("user_data")
 
         log.info("Loaded database")
 
