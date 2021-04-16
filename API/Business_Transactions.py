@@ -13,12 +13,8 @@ class Business:
         """
         Loads the database
         """
-        with open("API/user_db.json", "r") as file:
-            self.data = json.load(file)
-
-        with open("API/shop_db.json", "r") as file:
-            self.shop = json.load(file)
-
+        self.data = utils.load_data("user_data")
+        self.shop_data = utils.load_data("shop")
         log.info("Loaded database(s)")
 
     @utils.check
