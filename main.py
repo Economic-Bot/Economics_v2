@@ -118,5 +118,5 @@ def run_bot(*args):
 if __name__ == '__main__':
     synchronizer = Barrier(2)
     serializer = Lock()
-    Process(target=run_bot, args=(synchronizer, serializer)).start()
+    # Process(target=run_bot, args=(synchronizer, serializer)).start()
     Process(target=run_server, args=(synchronizer, serializer)).start()
