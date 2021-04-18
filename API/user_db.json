@@ -1,1 +1,17 @@
-{}
+{
+    "5": {
+        "wallet": 100,
+        "bank": 500,
+        "inventory": {}
+    },
+    "50": {
+        "wallet": 100.0,
+        "bank": 500.0,
+        "inventory": {}
+    },
+    "10": {
+        "wallet": 100,
+        "bank": 500,
+        "inventory": {}
+    }
+}
