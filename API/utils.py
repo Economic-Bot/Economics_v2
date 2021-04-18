@@ -31,9 +31,17 @@ def check(function):
         args = to_int(user_id=user_id, **args)
         args["user_id"] = int(user_id)
 
+        new_data = {}
         if data:
-            save_data(data)
-        self.__class__.__init__(self)  # to reload the data
+            previous_data = load_data("user_data")
+            new_data = dict(list(data.items()) + list(previous_data.items()))
+            save_data(new_data)
+
+        if new_data:
+            self.data = new_data
+        
+        save_data(self.data)
+        self.data = load_data("user_data")
         return function(self, **args)
     return check_account_exists
 
@@ -51,7 +59,15 @@ def load_data(which_data: str) -> dict:
     """
     if which_data == "user_data":
         with open("API/user_db.json", "r") as file:
-            return json.load(file)
+            data = json.load(file)
+            data_keys = map(int, list(data.keys()))
+            
+            for old_data, new_data in zip(list(data.keys()), data_keys):
+                old_info_ = data[old_data]
+                data.pop(old_data)  # remove the old keys
+                # add the new key
+                data[new_data] = old_info_
+            return data
     else:
         with open("API/shop_db.json", "r") as file:
             return json.load(file)
