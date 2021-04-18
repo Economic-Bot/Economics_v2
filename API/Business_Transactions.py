@@ -14,7 +14,7 @@ class Business:
         Loads the database
         """
         self.data = utils.load_data("user_data")
-        self.shop_data = utils.load_data("shop")
+        self.shop = utils.load_data("shop")
         log.info("Loaded database(s)")
 
     @utils.check
@@ -29,14 +29,15 @@ class Business:
             if self.data[user_id]["wallet"] >= cost:
                 self.data[user_id]["wallet"] -= cost
                 log.info(f"Deducted {cost} from {user_id}'s wallet balance")
-
+                
+                self.data[user_id]["inventory"][item] = {}
                 # store that in the `inventory`
                 if self.data[user_id]["inventory"][item].get("amount", 0):
                     self.data[user_id]["inventory"][item]["amount"] += amount
-                    log.info("Increased the number of {item} by {amount}")
+                    log.info(f"Increased the number of {item} by {amount}")
                 else:
                     self.data[user_id]["inventory"][item]["amount"] = amount
-                    log.info("Added {item} to the inventory")
+                    log.info(f"Added {item} to the inventory")
 
                 log.info(f"Sending info: {True}, {cost}, {None}")
                 return {"flag": True, "cost": cost, "None": utils.save_data(self.data)}
