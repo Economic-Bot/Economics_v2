@@ -40,7 +40,7 @@ class Transaction(Business_Transactions.Business):
         Wallet amount decreases
         :return: Boolean
         """
-        if self.data[user_id]["wallet"] < amount:
+        if self.data[user_id]["wallet"] > amount:
             self.data[user_id]["bank"] += amount
             self.data[user_id]["wallet"] -= amount
             return {"flag": True, "None": utils.save_data(self.data)}
