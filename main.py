@@ -25,11 +25,11 @@ commands = [
     if i[-3:] == ".py" and i not in file_to_ignore
 ]
 for i in commands:
-    # try:
+    try:
         bot.load_extension(i)
         print(f"Loaded: {i!r}")
-    # except Exception as error:
-    #     print(f"Couldn't load: {i!r}")
-    #     print(f"Error: {error!r}")
+    except Exception as error:
+        print(f"Couldn't load: {i!r}")
+        print(f"Error: {error!r}")
 
 bot.run(TOKEN)
