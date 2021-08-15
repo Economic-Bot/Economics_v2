@@ -1,3 +1,4 @@
+from typing import Dict, Any
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.errors import DuplicateKeyError
@@ -25,3 +26,12 @@ def check_user_exists(*, user_id: int):
         USER_DATABASE.insert_one(data)
     except DuplicateKeyError:  # the `user_id` already exists
         pass
+
+
+def update_database(*, user_id: int, new_data: Dict[str, Any]):
+    """Updates the database
+    if there is a change in the total number of coins in the user's bank etc
+    """
+    query = {"_id": user_id}
+    new_data = {"$set": new_data}
+    USER_DATABASE.update_one(query, new_data)
