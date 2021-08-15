@@ -1,7 +1,6 @@
-from discord.ext import commands
-from discord.ext.commands import Context
+from discord.ext.commands import Bot, Context
 
-bot = commands.Bot(command_prefix="%")
+bot = Bot(command_prefix="%")
 
 @bot.event
 async def on_ready():
