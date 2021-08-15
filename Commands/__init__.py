@@ -14,7 +14,7 @@ client = MongoClient(
     "myFirstDatabase?retryWrites=true&w=majority"
 )
 db = client.get_database("economicbot")
-USER_DATABASE: Collection = db.get("user_balance")
+USER_DATABASE: Collection = db["user_balance"]
 
 
 def check_user_exists(*, user_id: int):
