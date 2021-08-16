@@ -15,6 +15,21 @@ async def echo(ctx: Context, *, message):
     await ctx.reply(message if message else "Hello")
 
 
+@bot.command()
+async def reload(ctx: Context, extension: str):
+    if ctx.author.id != 759129467414380554:
+        return await ctx.reply("What are you on?")
+
+    try:
+        bot.reload_extension(f"Commands.{extension}")
+        ctx.send(f"Reloaded: {extension}")
+    except Exception as error:
+        ctx.send(f"Couldn't load: {i!r}")
+        ctx.send(f"Error: {extension}")
+        print(f"Couldn't load: {i!r}")
+        print(f"Error: {error!r}")
+
+
 with open(".env") as file:
     TOKEN = file.readlines()[0].split("=")[1]
 
