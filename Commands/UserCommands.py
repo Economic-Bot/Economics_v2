@@ -12,7 +12,7 @@ class UserCommands(Cog):
     async def dep(self, ctx: Context, amount: int):
         """Allows the user to transfer coins from their wallet to the bank"""
         check_user_exists(user_id=ctx.author.id)
-        query = USER_DATABASE.find_one({"_id": "11"})
+        query = USER_DATABASE.find_one({"_id": ctx.author.id})
         bank = query["bank"]
         wallet = query["wallet"]
         if amount > wallet:
@@ -36,7 +36,7 @@ class UserCommands(Cog):
         wallet += amount
         bank -= amount
         update_database(user_id=ctx.author.id, new_data={"wallet": wallet, "bank": bank})
-        await ctx.reply(f"You deposited {amount}")
+        await ctx.reply(f"You withdrew {amount}")
 
     @command(alias=["balance"])
     async def bal(self, ctx: Context, another_user: Optional[Member] = None):
@@ -55,8 +55,8 @@ class UserCommands(Cog):
 
         title = (
             f"Balance of: {user}"
-            f"\nBank: {bank}"
             f"\nWallet: {wallet}"
+            f"\nBank: {bank}"
         )
         embed = Embed(title=title, color=Color.random())
         await ctx.reply(embed=embed)
