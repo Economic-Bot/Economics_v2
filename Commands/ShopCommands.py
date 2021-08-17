@@ -24,6 +24,7 @@ class ShopCommands(Cog):
 
         if not isinstance(amount, int):
             item = amount
+            amount = 1
 
         if not isinstance(amount, int):
             return await ctx.reply(f"{amount!r} isn't a valid amount")
