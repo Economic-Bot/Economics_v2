@@ -1,5 +1,5 @@
-from typing import Optional
-from . import USER_DATABASE, check_user_exists, update_database
+from typing import Dict, Optional
+from . import USER_DATABASE, SHOP, check_user_exists, update_database
 from discord import Member, Embed, Color
 from discord.ext.commands import Cog, Context, command
 
@@ -8,7 +8,7 @@ class UserCommands(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(alias=["deposit"])
+    @command(aliases=["deposit"])
     async def dep(self, ctx: Context, amount: int):
         """Allows the user to transfer coins from their wallet to the bank"""
         check_user_exists(user_id=ctx.author.id)
@@ -23,7 +23,7 @@ class UserCommands(Cog):
         update_database(user_id=ctx.author.id, new_data={"wallet": wallet, "bank": bank})
         await ctx.reply(f"You deposited {amount}")
 
-    @command(alias=["with"])
+    @command(aliases=["with"])
     async def withdraw(self, ctx: Context, amount: int):
         """Allows the user to transfer coins from their bank to the wallet"""
         check_user_exists(user_id=ctx.author.id)
@@ -38,7 +38,7 @@ class UserCommands(Cog):
         update_database(user_id=ctx.author.id, new_data={"wallet": wallet, "bank": bank})
         await ctx.reply(f"You withdrew {amount}")
 
-    @command(alias=["balance"])
+    @command(aliases=["balance"])
     async def bal(self, ctx: Context, another_user: Optional[Member] = None):
         """Allows a user to check their balance"""
         if another_user:
@@ -53,10 +53,16 @@ class UserCommands(Cog):
         bank = query["bank"]
         wallet = query["wallet"]
 
+        inventory: Dict[str, int] = query["inventory"]
+        total_cost = 0
+        for i in inventory:
+            total_cost += SHOP[i] * inventory[i]
+
         title = (
             f"Balance of: {user}"
             f"\nWallet: {wallet}"
             f"\nBank: {bank}"
+            f"\nInventory: {total_cost}"
         )
         embed = Embed(title=title, color=Color.random())
         await ctx.reply(embed=embed)
