@@ -27,7 +27,7 @@ def check_user_exists(*, user_id: int):
     If it doesn't exists, then it is added to the database
     """
     try:
-        data = {"_id": user_id, "wallet": 100, "bank": 150, "inventory": {}}
+        data = {"_id": user_id, "wallet": 1000, "bank": 1500, "inventory": {}}
         USER_DATABASE.insert_one(data)
     except DuplicateKeyError:  # the `user_id` already exists
         pass
