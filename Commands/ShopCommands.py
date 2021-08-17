@@ -18,12 +18,16 @@ class ShopCommands(Cog):
         await ctx.reply(embed=embed)
 
     @command()
-    async def sell(self, ctx: Context, item: str, amount: Optional[int] = 1):
+    async def sell(self, ctx: Context, amount: int, item: Optional[str] = None):
         """Allows the user to sell items from their inventory"""
         check_user_exists(user_id=ctx.author.id)
 
         if not isinstance(amount, int):
+            item = amount
+
+        if not isinstance(amount, int):
             return await ctx.reply(f"{amount!r} isn't a valid amount")
+
         query = USER_DATABASE.find_one({"_id": ctx.author.id})
         wallet = query["wallet"]
         inventory: Dict[str, int] = query["inventory"]
@@ -31,9 +35,16 @@ class ShopCommands(Cog):
         if item.lower() not in inventory:
             return await ctx.reply(f"You don't own {item!r}")
 
-        cost = inventory[item.lower()]
+        if inventory[item] < amount:
+            return await ctx.reply(f"You don't own {amount} {item}!")
+
+        cost = SHOP[item.lower()] * amount
         wallet += cost
-        del inventory[item]
+        inventory[item] -= amount
+
+        if inventory[item] <= 0:
+            del inventory[item]
+
         new_data = {"wallet": wallet, "inventory": inventory}
         update_database(user_id=ctx.author.id, new_data=new_data)
         await ctx.reply(f"You sold {amount} {item} for {cost}")
