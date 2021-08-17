@@ -64,6 +64,22 @@ class RevenueCommands(Cog):
         update_database(user_id=other_user.id, new_data={"wallet": other_user_wallet})
         await ctx.reply(f"You send {amount} to <@{other_user.id}>")
 
+    @command(aliases=["gamble"])
+    async def bet(ctx: Context, amount: int):
+        """Allows the user to gamble and gain (or loose) money"""
+        check_user_exists(user_id=ctx.author.id)
+        query = USER_DATABASE.find_one({"_id": ctx.author.id})
+        luck = randint(1, 13)
+        if luck in [1, 9, 6]:
+            # the user had bad luck, rip
+            query["wallet"] -= amount
+            update_database(user_id=ctx.author.id, new_data={"wallet": query["wallet"]})
+            return await ctx.reply(f"You lost {amount}!")
+
+        query["wallet"] += amount
+        update_database(user_id=ctx.author.id, new_data={"wallet": query["wallet"]})
+        await ctx.reply(f"You won {amount}!")
+
 
 def setup(bot):
     bot.add_cog(RevenueCommands(bot))
