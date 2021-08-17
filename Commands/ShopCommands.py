@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Dict, Optional
 from . import USER_DATABASE, check_user_exists, update_database
 from discord import Embed, Color
 from discord.ext.commands import Cog, Context, command
@@ -49,6 +49,7 @@ class ShopCommands(Cog):
 
         query = USER_DATABASE.find_one({"_id": ctx.author.id})
         wallet = query["wallet"]
+        inventory: Dict[str, int] = query["inventory"]
         total_cost = SHOP[product] * amount
 
         if total_cost > wallet:
@@ -57,7 +58,16 @@ class ShopCommands(Cog):
                 f"You don't have enough money in your wallet to buy {amount} {product}"
             )
         wallet -= total_cost
-        update_database(user_id=ctx.author.id, new_data={"wallet": wallet})
+        if product in inventory:
+            inventory[product] = inventory[product] + amount
+        else:
+            inventory[product] = amount
+        new_data = {
+            "wallet": wallet,
+            "inventory": inventory
+        }
+
+        update_database(user_id=ctx.author.id, new_data=new_data)
         await ctx.reply(f"You successfully bought {amount} {product} for {total_cost}")
 
 
