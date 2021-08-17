@@ -1,13 +1,7 @@
 from typing import Dict, Optional
-from . import USER_DATABASE, check_user_exists, update_database
-from discord import Embed, Color
+from . import USER_DATABASE, SHOP, check_user_exists, update_database
+from discord import Embed, Color, Member
 from discord.ext.commands import Cog, Context, command
-
-
-SHOP = {
-    "Laptop": 50, "Mouse": 60, "keyboard": 70,
-    "Chair": 80, "Phone": 90, "Monitor": 100
-}
 
 
 class ShopCommands(Cog):
@@ -69,6 +63,27 @@ class ShopCommands(Cog):
 
         update_database(user_id=ctx.author.id, new_data=new_data)
         await ctx.reply(f"You successfully bought {amount} {product} for {total_cost}")
+
+    @command(aliases=["inv"])
+    async def inventory(self, ctx: Context, another_user: Optional[Member] = None):
+        """Allows the user to check their (or another user's) inventory
+        """
+        if another_user:
+            user_id = another_user.id
+            user = another_user
+        else:
+            user_id = ctx.author.id
+            user = ctx.author
+        check_user_exists(user_id=user_id)
+        query = USER_DATABASE.find_one({"_id": ctx.author.id})
+        embed = Embed(title=f"{user}'s inventory", color=Color.random())
+        inventory = query["inventory"]
+        for i in inventory:
+            embed.add_field(
+                name=f"{i}",
+                value=f"Amount: {inventory[i]}\nWorth: {SHOP[i] * inventory[i]}"
+            )
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
