@@ -14,7 +14,7 @@ class ShopCommands(Cog):
         """
         embed = Embed(title="Shop", color=Color.random())
         for i in SHOP:
-            embed.add_field(name=i, value=str(SHOP[i]))
+            embed.add_field(name=i.capitalize(), value=str(SHOP[i]))
         await ctx.reply(embed=embed)
 
     @command()
@@ -38,7 +38,7 @@ class ShopCommands(Cog):
         elif amount <= 0:
             amount = 1
 
-        if product.capitalize() not in SHOP:
+        if product not in SHOP:
             return await ctx.reply(f"{product!r} isn't present in the shop")
 
         query = USER_DATABASE.find_one({"_id": ctx.author.id})

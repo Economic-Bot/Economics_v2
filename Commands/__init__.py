@@ -17,8 +17,8 @@ db = client.get_database("economicbot")
 USER_DATABASE: Collection = db["user_balance"]
 
 SHOP = {
-    "Laptop": 50, "Mouse": 60, "Keyboard": 70,
-    "Chair": 80, "Phone": 90, "Monitor": 100
+    "laptop": 50, "mouse": 60, "keyboard": 70,
+    "chair": 80, "phone": 90, "monitor": 100
 }
 
 

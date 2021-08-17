@@ -56,7 +56,7 @@ class UserCommands(Cog):
         inventory: Dict[str, int] = query["inventory"]
         total_cost = 0
         for i in inventory:
-            total_cost += SHOP[i] * inventory[i]
+            total_cost += SHOP[i.lower()] * inventory[i]
 
         title = (
             f"Balance of: {user}"
