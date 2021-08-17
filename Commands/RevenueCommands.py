@@ -24,13 +24,31 @@ class RevenueCommands(Cog):
             await ctx.send(f"You got caught, and had to pay 100 to <@{other_user.id}>")
         else:
             # the sender received money
-            wallet += luck/100 * other_user_query["wallet"]
+            wallet += int(luck/100 * other_user_query["wallet"])
             # the other user lost money
-            await ctx.reply(f"You got {luck/100 * other_user_query['wallet']}")
-            other_user_query["wallet"] *= (100-luck)/100
+            await ctx.reply(f"You got {int(luck/100 * other_user_query['wallet'])}")
+            other_user_query["wallet"] *= int((100-luck)/100)
 
         update_database(user_id=ctx.author.id, new_data={"wallet": wallet})
         update_database(user_id=other_user.id, new_data={"wallet": other_user_query["wallet"]})
+
+    @command(aliases=["send"])
+    async def give(self, ctx: Context, amount: int, other_user: Member):
+        """Allows the user to give/send money to each other"""
+        check_user_exists(user_id=ctx.author.id)
+        check_user_exists(user_id=other_user.id)
+
+        wallet = USER_DATABASE.find_one({"_id": ctx.author.id})["wallet"]
+        other_user_wallet = USER_DATABASE.find_one({"_id": other_user.id})["wallet"]
+
+        if wallet < amount:
+            return await ctx.reply(f"You don't have {wallet!r} in your wallet!")
+
+        wallet -= amount
+        other_user_wallet += amount
+        update_database(user_id=ctx.author.id, new_data={"wallet": wallet})
+        update_database(user_id=other_user.id, new_data={"wallet": other_user_wallet})
+        await ctx.reply(f"You send {amount} to <@{other_user.id}>")
 
 
 def setup(bot):
