@@ -22,10 +22,10 @@ async def reload(ctx: Context, extension: str):
 
     try:
         bot.reload_extension(f"Commands.{extension}")
-        ctx.send(f"Reloaded: {extension}")
+        await ctx.send(f"Reloaded: {extension}")
     except Exception as error:
-        ctx.send(f"Couldn't load: {i!r}")
-        ctx.send(f"Error: {extension}")
+        await ctx.send(f"Couldn't load: {i!r}")
+        await ctx.send(f"Error: {extension}")
         print(f"Couldn't load: {i!r}")
         print(f"Error: {error!r}")
 
