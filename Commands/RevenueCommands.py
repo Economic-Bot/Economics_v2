@@ -9,6 +9,20 @@ class RevenueCommands(Cog):
         self.bot = bot
 
     @command()
+    async def beg(self, ctx: Context):
+        """Allows the user to get free coins if they are lucky enough"""
+        check_user_exists(user_id=ctx.author.id)
+        luck = randint(1, 13)
+        if luck in [1, 9, 6]:
+            # the user had bad luck, rip
+            return await ctx.reply("None gave you a single cent :/")
+
+        query = USER_DATABASE.find_one({"_id": ctx.author.id})
+        query["wallet"] += luck * 100
+        update_database(user_id=ctx.author.id, new_data={"wallet": query["wallet"]})
+        await ctx.reply(f"Somone gave you {luck*100}")
+
+    @command()
     async def rob(self, ctx: Context, other_user: Member):
         """Allows a user to rob another user to gain more money"""
         check_user_exists(user_id=ctx.author.id)
