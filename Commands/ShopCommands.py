@@ -18,6 +18,27 @@ class ShopCommands(Cog):
         await ctx.reply(embed=embed)
 
     @command()
+    async def sell(self, ctx: Context, item: str, amount: Optional[int] = 1):
+        """Allows the user to sell items from their inventory"""
+        check_user_exists(user_id=ctx.author.id)
+
+        if not isinstance(amount, int):
+            return await ctx.reply(f"{amount!r} isn't a valid amount")
+        query = USER_DATABASE.find_one({"_id": ctx.author.id})
+        wallet = query["wallet"]
+        inventory: Dict[str, int] = query["inventory"]
+
+        if item.lower() not in inventory:
+            return await ctx.reply(f"You don't own {item!r}")
+
+        cost = inventory[item.lower()]
+        wallet += cost
+        del inventory[item]
+        new_data = {"wallet": wallet, "inventory": inventory}
+        update_database(user_id=ctx.author.id, new_data=new_data)
+        await ctx.reply(f"You sold {amount} {item} for {cost}")
+
+    @command()
     async def buy(self, ctx: Context, amount: Optional[int] = 1, product: Optional[str] = None):
         """Allows the user to buy a specific product
 
@@ -38,13 +59,13 @@ class ShopCommands(Cog):
         elif amount <= 0:
             amount = 1
 
-        if product not in SHOP:
+        if product.lower() not in SHOP:
             return await ctx.reply(f"{product!r} isn't present in the shop")
 
         query = USER_DATABASE.find_one({"_id": ctx.author.id})
         wallet = query["wallet"]
         inventory: Dict[str, int] = query["inventory"]
-        total_cost = SHOP[product] * amount
+        total_cost = SHOP[product.lower()] * amount
 
         if total_cost > wallet:
             # user doesn't have enough funds
@@ -53,16 +74,16 @@ class ShopCommands(Cog):
             )
         wallet -= total_cost
         if product in inventory:
-            inventory[product] = inventory[product] + amount
+            inventory[product.lower()] = inventory[product.lower()] + amount
         else:
-            inventory[product] = amount
+            inventory[product.lower()] = amount
         new_data = {
             "wallet": wallet,
             "inventory": inventory
         }
 
         update_database(user_id=ctx.author.id, new_data=new_data)
-        await ctx.reply(f"You successfully bought {amount} {product} for {total_cost}")
+        await ctx.reply(f"You successfully bought {amount} {product.lower()} for {total_cost}")
 
     @command(aliases=["inv"])
     async def inventory(self, ctx: Context, another_user: Optional[Member] = None):
