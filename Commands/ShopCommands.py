@@ -18,7 +18,7 @@ class ShopCommands(Cog):
         await ctx.reply(embed=embed)
 
     @command()
-    async def sell(self, ctx: Context, amount: int, item: Optional[str] = None):
+    async def sell(self, ctx: Context, amount: int, item: Optional[str] = "None"):
         """Allows the user to sell items from their inventory"""
         check_user_exists(user_id=ctx.author.id)
 
@@ -51,7 +51,7 @@ class ShopCommands(Cog):
         await ctx.reply(f"You sold {amount} {item} for {cost}")
 
     @command()
-    async def buy(self, ctx: Context, amount: Optional[int] = 1, product: Optional[str] = None):
+    async def buy(self, ctx: Context, amount: Optional[int] = 1, product: Optional[str] = "None"):
         """Allows the user to buy a specific product
 
         Args:
